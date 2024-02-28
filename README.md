@@ -12,7 +12,7 @@ The goal of this platform is to allow users to sign up, search and adopt pets_
 - npm i
 - npm run dev
 
-### Technologies Used
+### Technologies Used:
 - Node
 - Express
 - MongoDB with Mongoose
