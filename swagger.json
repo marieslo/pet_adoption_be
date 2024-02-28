@@ -1,0 +1,362 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Pet Adoption Website",
+    "version": "1.0.1",
+    "description": "This API aims to provide comprehensive functionality for managing users and their pets, with proper error handling"
+  },
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" },
+                  "firstName": { "type": "string" },
+                  "lastName": { "type": "string" },
+                  "phoneNumber": { "type": "string" },
+                  "isAdmin": { "type": "boolean" }
+                },
+                "required": ["email", "password", "firstName", "lastName", "phoneNumber"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": { "$ref": "#/components/schemas/User" },
+                    "token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad request, missing required fields or email already registered" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login as an existing user",
+        "tags": ["Authentication"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "user": { "$ref": "#/components/schemas/User" },
+                    "token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Incorrect password" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/pets": {
+      "get": {
+        "summary": "Get all pets",
+        "tags": ["Pets"],
+        "responses": {
+          "200": {
+            "description": "List of pets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Pet" }
+                }
+              }
+            }
+          },
+          "500": { "description": "Internal server error" }
+        }
+      },
+      "post": {
+        "summary": "Add a new pet",
+        "tags": ["Pets"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Pet" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pet added successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Pet" }
+              }
+            }
+          },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/pets/{id}": {
+      "get": {
+        "summary": "Get a single pet by ID",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to get" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pet details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Pet" }
+              }
+            }
+          },
+          "404": { "description": "Pet not found" },
+          "500": { "description": "Internal server error" }
+        }
+      },
+      "put": {
+        "summary": "Update pet details",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to update" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Pet" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated pet details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Pet" }
+              }
+            }
+          },
+          "404": { "description": "Pet not found" },
+          "500": { "description": "Internal server error" }
+        }
+      },
+      "delete": {
+        "summary": "Delete pet",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to delete" }
+        ],
+        "responses": {
+          "200": { "description": "Pet deleted successfully" },
+          "404": { "description": "Pet not found" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/pets/{id}/like": {
+      "post": {
+        "summary": "Like a pet",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to like" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "userId": { "type": "string" } },
+                "required": ["userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Pet liked successfully" },
+          "404": { "description": "Pet not found" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/pets/{id}/unlike/{userId}": {
+      "delete": {
+        "summary": "Unlike a pet",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to unlike" },
+          { "in": "path", "name": "userId", "schema": { "type": "string" }, "required": true, "description": "ID of the user who liked the pet" }
+        ],
+        "responses": {
+          "200": { "description": "Pet unliked successfully" },
+          "404": { "description": "Pet not found or user did not like the pet" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/pets/{id}/adopt": {
+      "put": {
+        "summary": "Adopt a pet",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to adopt" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "userId": { "type": "string" } },
+                "required": ["userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Pet adopted successfully" },
+          "404": { "description": "Pet not found or pet is already adopted" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/pets/{id}/foster": {
+      "put": {
+        "summary": "Foster a pet",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to foster" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "userId": { "type": "string" } },
+                "required": ["userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Pet fostered successfully" },
+          "404": { "description": "Pet not found or pet is already fostered" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    },
+    "/pets/{id}/return": {
+      "put": {
+        "summary": "Return a pet",
+        "tags": ["Pets"],
+        "parameters": [
+          { "in": "path", "name": "id", "schema": { "type": "string" }, "required": true, "description": "ID of the pet to return" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "userId": { "type": "string" } },
+                "required": ["userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Pet returned successfully" },
+          "404": { "description": "Pet not found or user is not currently fostering or adopting this pet" },
+          "500": { "description": "Internal server error" }
+        }
+      }
+    }
+  },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "_id": { "type": "string" },
+            "email": { "type": "string" },
+            "passwordHash": { "type": "string" },
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "phoneNumber": { "type": "string" },
+            "role": { "type": "string" },
+            "shortBio": { "type": "string" },
+            "likedPets": { "type": "array", "items": { "type": "string" } },
+            "fosteredPets": { "type": "array", "items": { "type": "string" } },
+            "adoptedPets": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "Pet": {
+          "type": "object",
+          "properties": {
+            "_id": { "type": "string" },
+            "name": { "type": "string" },
+            "type": { "type": "string" },
+            "breed": { "type": "string" },
+            "heightCm": { "type": "integer" },
+            "weightKg": { "type": "integer" },
+            "age": { "type": "integer" },
+            "adoptionStatus": { "type": "string" },
+            "likedBy": { "type": "array", "items": { "type": "string" } },
+            "adoptedBy": { "type": "array", "items": { "type": "string" } },
+            "fosteredBy": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "tags": [
+      {
+        "name": "Users",
+        "description": "User management endpoints"
+      },
+      {
+        "name": "Pets",
+        "description": "Pet management endpoints"
+      }
+    ]
+  }

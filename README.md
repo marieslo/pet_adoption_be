@@ -6,9 +6,9 @@ The goal of this platform is to allow users to sign up, search and adopt pets_
 
 > [!NOTE]
 > This is the backend\
-> [This is a link to the frontend](https://github.com/israeltechchallenge/fs-pet-adoption-fe-marieslo)
+> [This is a link to the frontend](https://github.com/marieslo/Pet-Adoption_client)
 
-### To run: 
+### To run locally: 
 - npm i
 - npm run dev
 
@@ -19,6 +19,7 @@ The goal of this platform is to allow users to sign up, search and adopt pets_
 - JWT for authentication
 - Express-validator
 - Bcrypt for password hashing
+- Swagger to create [API documentation](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1)
 
 > [!TIP]
 > ### Setting Up Environment Variables
