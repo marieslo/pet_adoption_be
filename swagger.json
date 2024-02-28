@@ -677,40 +677,62 @@
       }
     }
   },
-  "components": {
-    "schemas": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string" },
-          "email": { "type": "string" },
-          "passwordHash": { "type": "string" },
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "phoneNumber": { "type": "string" },
-          "role": { "type": "string" },
-          "shortBio": { "type": "string" },
-          "likedPets": { "type": "array", "items": { "type": "string" } },
-          "fosteredPets": { "type": "array", "items": { "type": "string" } },
-          "adoptedPets": { "type": "array", "items": { "type": "string" } }
-        }
-      },
-      "Pet": {
-        "type": "object",
-        "properties": {
-          "_id": { "type": "string" },
-          "name": { "type": "string" },
-          "type": { "type": "string" },
-          "breed": { "type": "string" },
-          "heightCm": { "type": "integer" },
-          "weightKg": { "type": "integer" },
-          "age": { "type": "integer" },
-          "adoptionStatus": { "type": "string" },
-          "likedBy": { "type": "array", "items": { "type": "string" } },
-          "fosteredBy": { "type": "string" },
-          "adoptedBy": { "type": "string" }
+      "components": {
+        "schemas": {
+          "User": {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string" },
+              "email": { "type": "string" },
+              "passwordHash": { "type": "string" },
+              "firstName": { "type": "string" },
+              "lastName": { "type": "string" },
+              "phoneNumber": { "type": "string" },
+              "role": { "type": "string" },
+              "shortBio": { "type": "string" },
+              "likedPets": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Pet" }
+              },
+              "fosteredPets": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Pet" }
+              },
+              "adoptedPets": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Pet" }
+              }
+            }
+          },
+          "Pet": {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string" },
+              "type": { "type": "string" },
+              "name": { "type": "string" },
+              "adoptionStatus": { "type": "string" },
+              "picture": { "type": "string" },
+              "heightCm": { "type": "number" },
+              "weightKg": { "type": "number" },
+              "color": { "type": "string" },
+              "bio": { "type": "string" },
+              "hypoallergenic": { "type": "boolean" },
+              "dietaryRestrictions": { "type": "string" },
+              "breed": { "type": "string" },
+              "likedBy": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/User" }
+              },
+              "adoptedBy": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/User" }
+              },
+              "fosteredBy": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          }
         }
       }
     }
-  }
-}
