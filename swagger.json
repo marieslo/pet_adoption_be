@@ -107,9 +107,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/User"
-                  }
+                  "items": { "$ref": "#/components/schemas/User" }
                 }
               }
             }
@@ -425,6 +423,80 @@
         }
       }
     },
+    "/pets/search": {
+      "get": {
+        "summary": "Search pets based on various criteria",
+        "tags": ["Pets"],
+        "parameters": [
+          {
+            "name": "adoptionStatus",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter pets by adoption status"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter pets by type"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter pets by name (case-insensitive regex)"
+          },
+          {
+            "name": "breed",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter pets by breed (case-insensitive regex)"
+          },
+          {
+            "name": "heightCm",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filter pets by minimum height (in centimeters)"
+          },
+          {
+            "name": "weightKg",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Filter pets by minimum weight (in kilograms)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pets matching the search criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pet"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/pets/{id}": {
       "get": {
         "summary": "Get a single pet by ID",
@@ -605,54 +677,40 @@
       }
     }
   },
-    "components": {
-      "schemas": {
-        "User": {
-          "type": "object",
-          "properties": {
-            "_id": { "type": "string" },
-            "email": { "type": "string" },
-            "passwordHash": { "type": "string" },
-            "firstName": { "type": "string" },
-            "lastName": { "type": "string" },
-            "phoneNumber": { "type": "string" },
-            "role": { "type": "string" },
-            "shortBio": { "type": "string" },
-            "likedPets": { "type": "array", "items": { "type": "string" } },
-            "fosteredPets": { "type": "array", "items": { "type": "string" } },
-            "adoptedPets": { "type": "array", "items": { "type": "string" } }
-          }
-        },
-        "Pet": {
-          "type": "object",
-          "properties": {
-            "_id": { "type": "string" },
-            "name": { "type": "string" },
-            "type": { "type": "string" },
-            "breed": { "type": "string" },
-            "heightCm": { "type": "integer" },
-            "weightKg": { "type": "integer" },
-            "age": { "type": "integer" },
-            "adoptionStatus": { "type": "string" },
-            "likedBy": { "type": "array", "items": { "type": "string" } },
-            "adoptedBy": { "type": "array", "items": { "type": "string" } },
-            "fosteredBy": { "type": "array", "items": { "type": "string" } }
-          }
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "email": { "type": "string" },
+          "passwordHash": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "phoneNumber": { "type": "string" },
+          "role": { "type": "string" },
+          "shortBio": { "type": "string" },
+          "likedPets": { "type": "array", "items": { "type": "string" } },
+          "fosteredPets": { "type": "array", "items": { "type": "string" } },
+          "adoptedPets": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "Pet": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "breed": { "type": "string" },
+          "heightCm": { "type": "integer" },
+          "weightKg": { "type": "integer" },
+          "age": { "type": "integer" },
+          "adoptionStatus": { "type": "string" },
+          "likedBy": { "type": "array", "items": { "type": "string" } },
+          "fosteredBy": { "type": "string" },
+          "adoptedBy": { "type": "string" }
         }
       }
-    },
-    "tags": [
-      {
-        "name": "Authentication",
-        "description": "Endpoints for user authentication"
-      },
-      {
-        "name": "Users",
-        "description": "User management endpoints"
-      },
-      {
-        "name": "Pets",
-        "description": "Pet management endpoints"
-      }
-    ]
+    }
   }
+}
