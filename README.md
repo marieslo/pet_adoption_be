@@ -1,8 +1,8 @@
 # Pet Adoption Website
 
-_This is a MERN fullstack project.\
-I built a pet adoption platform, with search, user/adoption management & admin dashboard.\
-The goal of this platform is to allow users to sign up, search and adopt pets_
+_This is a MERN full-stack project.\
+ I have developed a pet adoption platform complete with search functionality, user/adoption management, and an admin dashboard.\
+  The aim of this platform is to enable users to sign up, search for, and adopt pets_
 
 > [!NOTE]
 > This is the backend\
