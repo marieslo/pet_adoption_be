@@ -19,7 +19,8 @@ The goal of this platform is to allow users to sign up, search and adopt pets_
 - JWT for authentication
 - Express-validator
 - Bcrypt for password hashing
-- Swagger to create [API documentation](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1)
+- Swagger for [API documentation](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1)
+- Backend was deployed on [Render](https://pet-adoption-server-312p.onrender.com)
 
 > [!TIP]
 > ### Setting Up Environment Variables
