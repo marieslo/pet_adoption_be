@@ -20,7 +20,7 @@ _This is a MERN full-stack project.\
 - Express-validator
 - Bcrypt for password hashing
 - [Swagger](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1) and [Postman](https://documenter.getpostman.com/view/31862928/2sA2xb6bBY) for API documentation
-- The backend deployed on [Render](https://pet-adoption-server-312p.onrender.com)
+- The backend has been deployed on [Render](https://pet-adoption-server-312p.onrender.com)
 
 > [!TIP]
 > ### Setting Up Environment Variables
