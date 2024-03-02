@@ -19,8 +19,8 @@ _This is a MERN full-stack project.\
 - JWT for authentication
 - Express-validator
 - Bcrypt for password hashing
-- Swagger for [API documentation](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1)
-- Backend was deployed on [Render](https://pet-adoption-server-312p.onrender.com)
+- [Swagger](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1) and [Postman](https://documenter.getpostman.com/view/31862928/2sA2xb6bBY) for API documentation
+- The backend deployed on [Render](https://pet-adoption-server-312p.onrender.com)
 
 > [!TIP]
 > ### Setting Up Environment Variables
