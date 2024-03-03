@@ -5,7 +5,7 @@ _This is a MERN full-stack project.\
   The aim of this platform is to enable users to sign up, search for, and adopt pets_
 
 > [!NOTE]
-> This is the backend\
+> This is the backend (deployed on [Render](https://pet-adoption-server-312p.onrender.com))\
 > [This is a link to the frontend](https://github.com/marieslo/Pet-Adoption_client)
 
 ### To run locally: 
@@ -19,8 +19,10 @@ _This is a MERN full-stack project.\
 - JWT for authentication
 - Express-validator
 - Bcrypt for password hashing
-- [Swagger](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1) and [Postman](https://documenter.getpostman.com/view/31862928/2sA2xb6bBY) for API documentation
-- The backend has been deployed on [Render](https://pet-adoption-server-312p.onrender.com)
+
+### API documentation:
+- [Swagger](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1)
+- [Postman](https://documenter.getpostman.com/view/31862928/2sA2xb6bBY)
 
 > [!TIP]
 > ### Setting Up Environment Variables
