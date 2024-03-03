@@ -28,6 +28,6 @@ _This is a MERN full-stack project.\
 > ### To run locally: 
 - npm i
 - npm run dev
-- You need to set up environment variables using a `.env` file. Follow these steps:
+- set up environment variables using a `.env` file:
 > 1. **Create a `.env` file:** in the root directory of the project.
 > 2. **Open `.env.example`:** and replace the placeholder values in your `.env` with your actual configuration
