@@ -5,8 +5,11 @@ _This is a MERN full-stack project.\
   The aim of this platform is to enable users to sign up, search for, and adopt pets_
 
 > [!NOTE]
-> This is the backend (deployed on [Render](https://pet-adoption-server-312p.onrender.com))\
+> This is the backend\
 > [This is a link to the frontend](https://github.com/marieslo/Pet-Adoption_client)
+
+### Deploy:
+[Render](https://pet-adoption-server-312p.onrender.com))
 
 ### To run locally: 
 - npm i
