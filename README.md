@@ -9,7 +9,7 @@ _This is a MERN full-stack project.\
 > [This is a link to the frontend](https://github.com/marieslo/Pet-Adoption_client)
 
 ### Deploy:
-[Render](https://pet-adoption-server-312p.onrender.com))
+[Render](https://pet-adoption-server-312p.onrender.com)
 
 ### To run locally: 
 - npm i
