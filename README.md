@@ -11,10 +11,6 @@ _This is a MERN full-stack project.\
 ### Deploy:
 [Render](https://pet-adoption-server-312p.onrender.com)
 
-### To run locally: 
-- npm i
-- npm run dev
-
 ### Technologies Used:
 - Node
 - Express
@@ -28,7 +24,10 @@ _This is a MERN full-stack project.\
 - [Postman](https://documenter.getpostman.com/view/31862928/2sA2xb6bBY)
 
 > [!TIP]
-> ### Setting Up Environment Variables
-> To run this project locally, you need to set up environment variables using a `.env` file. Follow these steps:
+> 
+> ### To run locally: 
+- npm i
+- npm run dev
+- You need to set up environment variables using a `.env` file. Follow these steps:
 > 1. **Create a `.env` file:** in the root directory of the project.
 > 2. **Open `.env.example`:** and replace the placeholder values in your `.env` with your actual configuration
