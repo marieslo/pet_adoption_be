@@ -29,5 +29,5 @@ _This is a MERN full-stack project.\
 - npm i
 - npm run dev
 - set up environment variables using a `.env` file:
-> 1. **Create a `.env` file:** in the root directory of the project.
-> 2. **Open `.env.example`:** and replace the placeholder values in your `.env` with your actual configuration
+1. **Create a `.env` file:** in the root directory of the project.
+2. **Open `.env.example`:** and replace the placeholder values in your `.env` with your actual configuration
