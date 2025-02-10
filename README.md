@@ -8,8 +8,6 @@ _This is a MERN full-stack project.\
 > This is the backend\
 > [This is a link to the frontend](https://github.com/marieslo/Pet-Adoption_client)
 
-### Deploy:
-[Render](https://pet-adoption-server-312p.onrender.com)
 
 ### Technologies Used:
 - Node
@@ -21,7 +19,6 @@ _This is a MERN full-stack project.\
 
 ### API documentation:
 - [Swagger](https://app.swaggerhub.com/apis/MarieSlo/Pet-Adoption/1.0.1)
-- [Postman](https://documenter.getpostman.com/view/31862928/2sA2xb6bBY)
 
 > [!TIP]
 > 

@@ -1,0 +1,5 @@
+add testing
+add babel
+change "model" to "schema"
+add controllers
+move cloudinary here

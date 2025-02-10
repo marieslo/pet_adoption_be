@@ -15,20 +15,32 @@ router.get('/', async (req, res) => {
     }
 });
 
-// search pets
+// search and autocomplete pets
 router.get('/search', async (req, res) => {
     try {
-        const { adoptionStatus, type, name, breed, heightCm, weightKg } = req.query;
+        const { adoptionStatus, type, name, breed, heightCm, weightKg, autocomplete } = req.query;
         const query = {};
-
         if (adoptionStatus) query.adoptionStatus = adoptionStatus;
         if (type) query.type = type;
-        if (name) query.name = { $regex: name, $options: 'i' };
-        if (breed) query.breed = { $regex: breed, $options: 'i' };
         if (heightCm !== undefined) query.heightCm = { $gte: heightCm }; 
-        if (weightKg !== undefined) query.weightKg = { $gte: weightKg }; 
+        if (weightKg !== undefined) query.weightKg = { $gte: weightKg };
 
+        if (autocomplete === 'true') {
+            if (name) query.name = { $regex: name, $options: 'i' };
+            if (breed) query.breed = { $regex: breed, $options: 'i' };
+        } else {
+            if (name) query.name = name;
+            if (breed) query.breed = breed;
+        }
         const pets = await PetModel.find(query);
+        if (autocomplete === 'true') {
+            const suggestions = pets.map((pet) => ({
+                name: pet.name,
+                breed: pet.breed,
+                type: pet.type,
+            }));
+            return res.status(200).json(suggestions);
+        }
         res.status(200).json(pets);
     } catch (error) {
         console.error('Error searching pets:', error);

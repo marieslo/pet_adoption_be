@@ -154,4 +154,22 @@ router.get('/profile/:id/pets', async (req, res) => {
   }
 });
 
+// Get a user's posts
+router.get('/profile/:id/posts', async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await UserModel.findById(userId).populate('posts');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(user.posts); // Return the user's posts
+  } catch (error) {
+    console.error('Error fetching user posts:', error);
+    res.status(500).json({ message: 'Error fetching user posts' });
+  }
+});
+
 module.exports = router;
