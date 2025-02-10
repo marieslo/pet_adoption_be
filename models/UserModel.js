@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema({
   likedPets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
   fosteredPets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
   adoptedPets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
-});
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
+}, { timestamps: true });
 
 const UserModel = mongoose.model('User', userSchema);
 module.exports = UserModel;

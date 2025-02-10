@@ -11,3 +11,7 @@ logs/
 .DS_Store
 
 npm-debug.log*
+
+TO-DO
+
+swagger.json
