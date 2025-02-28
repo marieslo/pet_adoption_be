@@ -18,13 +18,15 @@ router.get('/', async (req, res) => {
 // search and autocomplete pets
 router.get('/search', async (req, res) => {
     try {
-        const { adoptionStatus, type, name, breed, heightCm, weightKg, autocomplete } = req.query;
+        const { adoptionStatus, type, name, breed, heightCm, weightKg, autocomplete, page = 0, limit = 10 } = req.query;
         const query = {};
+
         if (adoptionStatus) query.adoptionStatus = adoptionStatus;
         if (type) query.type = type;
-        if (heightCm !== undefined) query.heightCm = { $gte: heightCm }; 
+        if (heightCm !== undefined) query.heightCm = { $gte: heightCm };
         if (weightKg !== undefined) query.weightKg = { $gte: weightKg };
 
+        // Autocomplete logic
         if (autocomplete === 'true') {
             if (name) query.name = { $regex: name, $options: 'i' };
             if (breed) query.breed = { $regex: breed, $options: 'i' };
@@ -32,21 +34,25 @@ router.get('/search', async (req, res) => {
             if (name) query.name = name;
             if (breed) query.breed = breed;
         }
-        const pets = await PetModel.find(query);
+        const pets = await PetModel.find(query)
+            .limit(Number(limit))
+            .skip(Number(page) * Number(limit));
         if (autocomplete === 'true') {
-            const suggestions = pets.map((pet) => ({
+            const suggestions = pets.map(pet => ({
                 name: pet.name,
                 breed: pet.breed,
                 type: pet.type,
             }));
             return res.status(200).json(suggestions);
         }
+
         res.status(200).json(pets);
     } catch (error) {
         console.error('Error searching pets:', error);
         res.status(500).json({ message: 'Error searching pets', error: error.message });
     }
 });
+
 
 // single pet page
 router.get('/:id', async (req, res) => {
