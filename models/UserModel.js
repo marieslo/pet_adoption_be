@@ -7,32 +7,35 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     index: true,
-    validate: [isEmail, 'Invalid email format']
+    validate: [isEmail, 'Invalid email format'],
   },
   passwordHash: {
     type: String,
     required: true,
-    minlength: [6, 'Password must be at least 6 characters long']
+    minlength: [6, 'Password must be at least 6 characters long'],
   },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  phoneNumber: {
-    type: String,
+  firstName: { 
+    type: String, 
     required: true,
-    validate: {
-      validator: function(v) {
-        return /\d{3}\d{3}/.test(v);
-      },
-      message: props => `${props.value} is not a valid phone number! Please use the format XXXXXX`
-    }
+    trim: true
   },
-  role: { type: String, default: 'user', index: true },
-  shortBio: { type: String, default: '' },
+  role: { 
+    type: String, 
+    enum: ['user', 'admin'],
+    default: 'user', 
+    index: true,
+  },
+  shortBio: { 
+    type: String, 
+    default: '',
+    maxlength: [200, 'Short bio cannot exceed 200 characters']
+  },
   likedPets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
   fosteredPets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
   adoptedPets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 }, { timestamps: true });
+
 
 const UserModel = mongoose.model('User', userSchema);
 module.exports = UserModel;

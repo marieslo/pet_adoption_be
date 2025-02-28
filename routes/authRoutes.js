@@ -5,11 +5,11 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../models/UserModel');
 const KEY = process.env.KEY;
 
-
+// sign uo
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password, firstName, lastName, phoneNumber, isAdmin } = req.body;
-    if (!email || !password || !firstName || !lastName || !phoneNumber) {
+    const { email, password, firstName,  isAdmin } = req.body;
+    if (!email || !password || !firstName ) {
       return res.status(400).json({ message: 'All fields are required' });
     }
     const existingUser = await UserModel.findOne({ email });
@@ -18,7 +18,7 @@ router.post('/signup', async (req, res) => {
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const role = isAdmin ? 'admin' : 'user'; 
-    const user = await UserModel.create({ email, passwordHash, firstName, lastName, phoneNumber, role });
+    const user = await UserModel.create({ email, passwordHash, firstName, role });
     const token = jwt.sign({ _id: user._id, role: user.role }, KEY, { expiresIn: '30d' });
     res.status(201).json({ user, token });
   } catch (error) {
@@ -27,6 +27,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+// login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;

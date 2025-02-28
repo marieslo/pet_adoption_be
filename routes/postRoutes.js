@@ -150,5 +150,35 @@ router.post('/:postId/reaction', authMiddleware, async (req, res) => {
     }
   });
 
+  // Add a reaction to a post (POST request)
+router.post('/:postId/reaction', authMiddleware, async (req, res) => {
+  try {
+    const { reaction } = req.body;
+    const postId = req.params.postId;
+    if (!reaction || !['Like', 'Love', 'Laugh', 'Celebrate'].includes(reaction)) {
+      return res.status(400).json({ message: 'Valid reaction is required (Like, Love, Laugh, Celebrate)' });
+    }
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    const existingReaction = post.reactions.find(reaction => reaction.userId.toString() === req.user._id.toString());
+    if (existingReaction) {
+      return res.status(400).json({ message: 'You have already reacted to this post' });
+    }
+    const newReaction = {
+      userId: req.user._id,
+      reaction,  // (e.g., 'Like', 'Love')
+    };
+    post.reactions.push(newReaction);
+    await post.save();
+
+    res.status(201).json(newReaction);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error adding reaction' });
+  }
+});
+
   
 module.exports = router;
