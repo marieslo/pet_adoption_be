@@ -7,7 +7,7 @@ const postSchema = new mongoose.Schema({
   reactions: [
     {
       userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-      reaction: { type: String, required: true, enum: ['Like', 'Love', 'Laugh', 'Celebrate'] },  // Changed from emoji to word-based reaction
+      reaction: { type: String, required: true, enum: ['Like'] },
     }
   ],
   comments: [

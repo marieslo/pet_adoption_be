@@ -5,6 +5,9 @@ const PetModel = require('../models/PetModel');
 const addUserMiddleware = require('../middleware/addUserMiddleware');
 const {deleteUserAndPets} =  require('../middleware/deleteUserMiddleware');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const cloudinary = require('../cloudinary')
+const upload = multer({ dest: 'uploads/' });
 
 router.use(addUserMiddleware);
 
@@ -36,16 +39,29 @@ router.get('/profile/:id', async (req, res) => {
 });
 
 // update user pfofile details
-router.put('/profile/:id', async (req, res) => {
+router.put('/profile/:id', upload.single('avatar'), async (req, res) => {
   const userId = req.params.id;
   const userData = req.body;
 
   try {
-    const updatedUser = await UserModel.findByIdAndUpdate(userId, userData, { new: true });
+    let avatarUrl = userData.avatar;
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'pet-adoption',
+        public_id: `user_${userId}`,
+        overwrite: true,
+      });
+      avatarUrl = result.secure_url;
     }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { ...userData, avatar: avatarUrl },
+      { new: true }
+    );
+
+    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
 
     res.json(updatedUser);
   } catch (error) {
@@ -53,6 +69,7 @@ router.put('/profile/:id', async (req, res) => {
     res.status(500).json({ message: 'Error updating user profile' });
   }
 });
+
 
 // update user's password
 router.put('/profile/:id/password', async (req, res) => {
@@ -165,7 +182,7 @@ router.get('/profile/:id/posts', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.json(user.posts); // Return the user's posts
+    res.json(user.posts);
   } catch (error) {
     console.error('Error fetching user posts:', error);
     res.status(500).json({ message: 'Error fetching user posts' });

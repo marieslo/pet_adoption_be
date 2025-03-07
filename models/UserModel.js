@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -19,6 +20,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  avatar: {
+    type: String,
+    default: function () {
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(this.firstName || 'User')}&background=random`;
+    },
+  },
   role: { 
     type: String, 
     enum: ['user', 'admin'],
@@ -35,7 +42,6 @@ const userSchema = new mongoose.Schema({
   adoptedPets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' }],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 }, { timestamps: true });
-
 
 const UserModel = mongoose.model('User', userSchema);
 module.exports = UserModel;
