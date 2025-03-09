@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const PostModel = require('../models/PostModel.js');
-const UserModel = require('../models/UserModel.js');
+const PostModel = require('../schemas/PostSchema.js');
+const UserModel = require('../schemas/UserSchema.js');
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Create a new post (requires authentication)
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/create', authMiddleware, async (req, res) => {
   try {
     const { content, image } = req.body;
     if (!content) {
@@ -38,9 +38,12 @@ router.put('/:postId', authMiddleware, async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
+    // Ensure the user is trying to edit their own post
     if (post.user.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'You can only edit your own posts' });
     }
+
+    // Update the content or image if provided
     post.content = content || post.content;
     post.image = image || post.image;
 
@@ -52,34 +55,40 @@ router.put('/:postId', authMiddleware, async (req, res) => {
   }
 });
 
+
 // Delete a post (requires authentication)
 router.delete('/:postId', authMiddleware, async (req, res) => {
-    try {
-      const postId = req.params.postId;
-  
-      const post = await PostModel.findById(postId);
-      if (!post) {
-        return res.status(404).json({ message: 'Post not found' });
-      }
-      if (post.user.toString() !== req.user._id.toString()) {
-        return res.status(403).json({ message: 'You can only delete your own posts' });
-      }
-      await UserModel.findByIdAndUpdate(req.user._id, {
-        $pull: { posts: postId }
-      });
-      await post.deleteOne(); 
-      res.json({ message: 'Post deleted successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error deleting post' });
+  try {
+    const postId = req.params.postId;
+
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
     }
-  });
+    // Ensure the user is trying to delete their own post
+    if (post.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'You can only delete your own posts' });
+    }
+
+    // Remove post from user's list of posts
+    await UserModel.findByIdAndUpdate(req.user._id, {
+      $pull: { posts: postId }
+    });
+
+    await post.deleteOne();
+    res.json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error deleting post' });
+  }
+});
+
   
 // Get posts feed (public, no authentication required)
 router.get('/feed', async (req, res) => {
     try {
       const posts = await PostModel.find()
-        .populate('user', 'firstName lastName')
+        .populate('user', 'firstName avatar')
         .select('content image tags reactions createdAt user') 
         .sort({ createdAt: -1 }); 
   
@@ -150,7 +159,7 @@ router.post('/:postId/reaction', authMiddleware, async (req, res) => {
     }
   });
 
-  // Add a reaction to a post (POST request)
+// Add a reaction to a post (POST request)
 router.post('/:postId/reaction', authMiddleware, async (req, res) => {
   try {
     const { reaction } = req.body;
@@ -158,18 +167,20 @@ router.post('/:postId/reaction', authMiddleware, async (req, res) => {
     if (!reaction || !['Like', 'Love', 'Laugh', 'Celebrate'].includes(reaction)) {
       return res.status(400).json({ message: 'Valid reaction is required (Like, Love, Laugh, Celebrate)' });
     }
+
     const post = await PostModel.findById(postId);
     if (!post) {
       return res.status(404).json({ message: 'Post not found' });
     }
-    const existingReaction = post.reactions.find(reaction => reaction.userId.toString() === req.user._id.toString());
+
+    // Check if the user has already reacted
+    const existingReaction = post.reactions.find(r => r.userId.toString() === req.user._id.toString());
     if (existingReaction) {
       return res.status(400).json({ message: 'You have already reacted to this post' });
     }
-    const newReaction = {
-      userId: req.user._id,
-      reaction,  // (e.g., 'Like', 'Love')
-    };
+
+    // Add the new reaction
+    const newReaction = { userId: req.user._id, reaction };
     post.reactions.push(newReaction);
     await post.save();
 

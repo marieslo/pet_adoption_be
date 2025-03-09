@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const PetModel = require('../models/PetModel');
-const UserModel = require('../models/UserModel');
+const PetModel = require('../schemas/PetSchema');
+const UserModel = require('../schemas/UserSchema');
 
 
 // get all pets 
@@ -23,10 +23,8 @@ router.get('/search', async (req, res) => {
 
         if (adoptionStatus) query.adoptionStatus = adoptionStatus;
         if (type) query.type = type;
-        if (heightCm !== undefined) query.heightCm = { $gte: heightCm };
-        if (weightKg !== undefined) query.weightKg = { $gte: weightKg };
-
-        // Autocomplete logic
+        if (heightCm) query.heightCm = { $gte: Number(heightCm) };
+        if (weightKg) query.weightKg = { $gte: Number(weightKg) };
         if (autocomplete === 'true') {
             if (name) query.name = { $regex: name, $options: 'i' };
             if (breed) query.breed = { $regex: breed, $options: 'i' };
@@ -42,14 +40,14 @@ router.get('/search', async (req, res) => {
                 name: pet.name,
                 breed: pet.breed,
                 type: pet.type,
+                picture: pet.picture,
             }));
             return res.status(200).json(suggestions);
         }
-
         res.status(200).json(pets);
     } catch (error) {
-        console.error('Error searching pets:', error);
-        res.status(500).json({ message: 'Error searching pets', error: error.message });
+        console.error('Error fetching pets:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

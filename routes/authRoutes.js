@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); 
-const UserModel = require('../models/UserModel');
+const UserModel = require('../schemas/UserSchema');
 const KEY = process.env.KEY;
 
 // sign uo
