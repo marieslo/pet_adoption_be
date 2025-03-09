@@ -1,5 +1,5 @@
-const UserModel = require('../models/UserModel');
-const PetModel = require('../models/PetModel');
+const UserModel = require('../schemas/UserSchema');
+const PetModel = require('../schemas/PetSchema');
 
 
 const deleteUserAndPets = async (req, res, next) => {
