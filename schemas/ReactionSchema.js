@@ -1,24 +1,15 @@
 const mongoose = require('mongoose');
 
-const postSchema = new mongoose.Schema({
-  content: { type: String, required: true },
-  image: { type: String },
-  tags: [String],
-  reactions: [
-    {
-      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-      reaction: { type: String, required: true, enum: ['Like'] },
-    }
-  ],
-  comments: [
-    {
-      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-      content: { type: String, required: true },
-    }
-  ],
+const reactionSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  reaction: { 
+    type: String, 
+    required: true, 
+    enum: ['Like']  // Add more reactions if needed
+  },
   createdAt: { type: Date, default: Date.now },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
-const PostModel = mongoose.model('Post', postSchema);
-module.exports = PostModel;
+const Reaction = mongoose.model('Reaction', reactionSchema);
+
+module.exports = Reaction;

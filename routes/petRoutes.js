@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const PetModel = require('../schemas/PetSchema');
 const UserModel = require('../schemas/UserSchema');
@@ -131,7 +132,6 @@ router.post('/:id/like', async (req, res) => {
             await pet.save();
             await UserModel.findByIdAndUpdate(userId, { $push: { likedPets: pet._id } });
         }
-
         res.status(200).json({ message: `Liked pet with ID ${petId}` });
     } catch (error) {
         console.error('Error liking pet:', error);
@@ -144,12 +144,10 @@ router.delete('/:id/unlike/:userId', async (req, res) => {
     try {
         const petId = req.params.id;
         const userId = req.params.userId;
-
         const pet = await PetModel.findById(petId);
         if (!pet) {
             return res.status(404).json({ message: `Pet with ID ${petId} not found` });
         }
-
         const index = pet.likedBy.indexOf(userId);
         if (index !== -1) {
             pet.likedBy.splice(index, 1);
@@ -197,7 +195,7 @@ router.put('/:id/foster', async (req, res) => {
         if (!pet) {
             return res.status(404).json({ message: 'Pet not found' });
         }
-
+        pet.fosteredBy = pet.fosteredBy || [];
         if (!pet.fosteredBy.includes(req.body.userId)) {
             pet.fosteredBy.push(req.body.userId);
             pet.adoptionStatus = 'fostered'; 
@@ -212,6 +210,7 @@ router.put('/:id/foster', async (req, res) => {
         res.status(500).json({ message: 'Error fostering pet', error: error.message });
     }
 });
+
 
 // return pet
 router.put('/:id/return', async (req, res) => {
