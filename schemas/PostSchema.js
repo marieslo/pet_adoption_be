@@ -1,32 +1,23 @@
 const mongoose = require('mongoose');
-const Reaction = require('./ReactionSchema');
-const Comment = require('./CommentSchema'); 
+const Schema = mongoose.Schema;
 
-const postSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    content: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    image: {
-      type: String,
-    },
-    tags: {
-      type: [String],
-      default: [],
-    },
-    reactions: [Reaction.schema], 
-    comments: [Comment.schema],  
-  },
-  { timestamps: true }
-);
+const postSchema = new Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  pet: { type: mongoose.Schema.Types.ObjectId, ref: 'Pet', required: false },
+  content: { type: String, required: true },
+  tags: [String],
+  reactions: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    reaction: { type: String, enum: ['Like', 'Love', 'Laugh', 'Celebrate'] }
+  }],
+  comments: [{
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    content: { type: String },
+    createdAt: { type: Date, default: Date.now }
+  }],
+  createdAt: { type: Date, default: Date.now },
+  pet: { type: mongoose.Schema.Types.ObjectId, ref: 'Pet' },
+});
 
-const Post = mongoose.models.Post || mongoose.model('Post', postSchema);
-
-module.exports = Post;
+const PostModel = mongoose.model('Post', postSchema);
+module.exports = PostModel;
