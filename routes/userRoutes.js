@@ -25,7 +25,6 @@ router.get('/', async (req, res) => {
 // get user profile details
 router.get('/profile/:id', async (req, res) => {
   const userId = req.params.id;
-
   try {
     const user = await UserModel.findById(userId);
     if (!user) {
@@ -42,7 +41,6 @@ router.get('/profile/:id', async (req, res) => {
 router.put('/profile/:id', upload.single('avatar'), async (req, res) => {
   const userId = req.params.id;
   const userData = req.body;
-
   try {
     let avatarUrl = userData.avatar;
 
@@ -54,15 +52,12 @@ router.put('/profile/:id', upload.single('avatar'), async (req, res) => {
       });
       avatarUrl = result.secure_url;
     }
-
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,
       { ...userData, avatar: avatarUrl },
       { new: true }
     );
-
     if (!updatedUser) return res.status(404).json({ message: 'User not found' });
-
     res.json(updatedUser);
   } catch (error) {
     console.error('Error updating user profile:', error);
@@ -75,7 +70,6 @@ router.put('/profile/:id', upload.single('avatar'), async (req, res) => {
 router.put('/profile/:id/password', async (req, res) => {
   const userId = req.params.id;
   const { currentPassword, newPassword } = req.body;
-
   try {
     const user = await UserModel.findById(userId);
     if (!user) {
@@ -102,7 +96,6 @@ router.put('/profile/:id/password', async (req, res) => {
 // get user's current role
 router.get('/profile/:id/role', async (req, res) => {
   const userId = req.params.id;
-
   try {
     const user = await UserModel.findById(userId);
     if (!user) {
@@ -119,7 +112,6 @@ router.get('/profile/:id/role', async (req, res) => {
 router.put('/profile/:id/role', async (req, res) => {
   const userId = req.params.id;
   const newRole = req.body.role;
-
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(userId, { role: newRole }, { new: true });
     if (!updatedUser) {
@@ -163,7 +155,6 @@ router.get('/profile/:id/pets', async (req, res) => {
       fosteredPets,
       likedPets,
     };
-
     res.json(userPets);
   } catch (error) {
     console.error('Error fetching user pets:', error);
@@ -174,14 +165,11 @@ router.get('/profile/:id/pets', async (req, res) => {
 // Get a user's posts
 router.get('/profile/:id/posts', async (req, res) => {
   const userId = req.params.id;
-
   try {
     const user = await UserModel.findById(userId).populate('posts');
-
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
     res.json(user.posts);
   } catch (error) {
     console.error('Error fetching user posts:', error);

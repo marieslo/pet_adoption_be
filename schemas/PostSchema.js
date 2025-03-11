@@ -1,22 +1,30 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const postSchema = new Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  pet: { type: mongoose.Schema.Types.ObjectId, ref: 'Pet', required: false },
-  content: { type: String, required: true },
-  tags: [String],
+const postSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  pet: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Pet',
+    default: null
+  },
   reactions: [{
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    reaction: { type: String, enum: ['Like', 'Love', 'Laugh', 'Celebrate'] }
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    type: { type: String, enum: ['like', 'dislike'], required: true }
   }],
   comments: [{
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    content: { type: String },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    content: { type: String, required: true },
     createdAt: { type: Date, default: Date.now }
   }],
-  createdAt: { type: Date, default: Date.now },
-  pet: { type: mongoose.Schema.Types.ObjectId, ref: 'Pet' },
+  createdAt: { type: Date, default: Date.now }
 });
 
 const PostModel = mongoose.model('Post', postSchema);
