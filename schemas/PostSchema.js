@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const postSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -16,16 +17,36 @@ const postSchema = new mongoose.Schema({
     default: null
   },
   reactions: [{
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    type: { type: String, enum: ['like', 'dislike'], required: true }
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    type: {
+      type: String,
+      enum: ['like', 'dislike'],
+      required: true
+    }
   }],
   comments: [{
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    content: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now }
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
   }],
-  createdAt: { type: Date, default: Date.now }
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
+
 
 const PostModel = mongoose.model('Post', postSchema);
 module.exports = PostModel;
