@@ -78,13 +78,12 @@ router.put('/:postId', authMiddleware, async (req, res) => {
   }
 });
 
-
 // add a comment to a post
 router.post('/:postId/comments', authMiddleware, async (req, res) => {
   try {
     const { postId } = req.params;
     const { content } = req.body;
-    if (!content.trim()) {
+    if (typeof content !== 'string' || !content.trim()) {
       return res.status(400).json({ message: 'Content cannot be empty.' });
     }
     const post = await PostModel.findById(postId);
@@ -92,8 +91,7 @@ router.post('/:postId/comments', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Post not found' });
     }
     const newComment = {
-      user: req.user._id, 
-      firstName: req.user.firstName,
+      user: req.user._id,
       content,
     };
     post.comments.push(newComment);
@@ -104,32 +102,6 @@ router.post('/:postId/comments', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Error adding comment' });
   }
 });
-
-
-// delete a comment from a post
-router.delete('/:postId/comments/:commentId', authMiddleware, async (req, res) => {
-  try {
-    const { postId, commentId } = req.params;
-    const post = await PostModel.findById(postId);
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-    const commentIndex = post.comments.findIndex((comment) => comment._id.toString() === commentId);
-    if (commentIndex === -1) {
-      return res.status(404).json({ message: 'Comment not found' });
-    }
-    if (post.comments[commentIndex].user.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'You can only delete your own comments' });
-    }
-    post.comments.splice(commentIndex, 1);
-    await post.save()
-    res.status(200).json({ message: 'Comment deleted' });
-  } catch (error) {
-    console.error('Error deleting comment:', error);
-    res.status(500).json({ message: 'Error deleting comment' });
-  }
-});
-
 
 // react to a post 
 router.post('/:postId/reactions', authMiddleware, async (req, res) => {
@@ -163,12 +135,14 @@ router.post('/:postId/reactions', authMiddleware, async (req, res) => {
   }
 });
 
+
 // get posts feed (public, no authentication required)
 router.get('/feed', async (req, res) => {
   try {
     const posts = await PostModel.find()
-      .populate('user', 'firstName avatar')
+      .populate('user', 'firstName avatar shortBio')
       .populate('pet', 'name type picture')
+      .populate('comments.user', 'firstName avatar')
       .sort({ createdAt: -1 });
 
     res.json(posts);
