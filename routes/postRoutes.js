@@ -28,12 +28,14 @@ router.post('/create', authMiddleware, async (req, res) => {
     await UserModel.findByIdAndUpdate(req.user._id, {
       $push: { posts: savedPost._id },
     });
+    await savedPost.populate('pet', 'name type picture');
     res.status(201).json(savedPost);
   } catch (error) {
     console.error('Error creating post:', error);
     res.status(500).json({ message: 'Error creating post' });
   }
 });
+
 
 // delete a post
 router.delete('/:postId', authMiddleware, async (req, res) => {
@@ -118,13 +120,11 @@ router.post('/:postId/reactions', authMiddleware, async (req, res) => {
     const existingReaction = post.reactions.find((reaction) => reaction.user.toString() === req.user._id.toString());
     if (existingReaction) {
       if (existingReaction.type === type) {
-        // If the user clicks the same reaction, remove it (unreact)
         post.reactions = post.reactions.filter((reaction) => reaction.user.toString() !== req.user._id.toString());
       } else {
         existingReaction.type = type;
       }
     } else {
-      // If the user hasn't reacted yet, add the reaction
       post.reactions.push({ user: req.user._id, type });
     }
     await post.save();
