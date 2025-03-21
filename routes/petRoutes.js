@@ -56,7 +56,7 @@ router.get('/search', async (req, res) => {
 // single pet page
 router.get('/:id', async (req, res) => {
     try {
-        const pet = await PetModel.findById(req.params.id); 
+        const pet = await PetModel.findById(req.params.id).populate('adoptedBy').populate('fosteredBy');
         if (!pet) {
             return res.status(404).json({ message: `Pet with ID ${req.params.id} not found` });
         }
