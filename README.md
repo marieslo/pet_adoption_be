@@ -6,7 +6,7 @@ _This is a MERN full-stack project.\
 
 > [!NOTE]
 > This is the backend\
-> [This is a link to the frontend](https://github.com/marieslo/Pet-Adoption_client)
+> [This is a link to the frontend](https://github.com/marieslo/pet_adoption_fe)
 
 
 ### Technologies Used:
