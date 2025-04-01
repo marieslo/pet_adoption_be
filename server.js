@@ -10,7 +10,22 @@ const postRoutes = require('./routes/postRoutes')
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
+const allowedOrigins = [
+  'http://localhost:8080',
+  'https://pet-adoption-fe.netlify.app'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
